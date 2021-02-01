@@ -1,0 +1,39 @@
+name: Test action
+on:
+  push:
+jobs:
+  should-mock-binary-and-assert:
+    name: Should mock binary
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Arrange - Mock "kustomize" and "kubectl" commands
+        uses: './'
+        with:
+          commands: |
+            kubectl
+            kustomize
+
+      - name: Act - call some mocked functions
+        run: |
+          kubectl version
+          kustomize edit set image my-image
+          kustomize build | kubectl apply -f -
+
+
+      - name: Assert - With multiple args
+        uses: './'
+        with:
+          commands: kustomize
+          assert-args: |
+            ["edit", "set", "image", "my-image"]
+            ["build"]
+
+      - name: Assert - Using a specific call-index
+        uses: './'
+        with:
+          commands: kubectl
+          assert-call-index: 1
+          assert-args: |
+            ["apply", "-f", "-"]
