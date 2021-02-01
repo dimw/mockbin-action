@@ -46,9 +46,7 @@ runs:
             while IFS= read -r expected_args; do
               if [[ -n "$expected_args" ]]; then
                 perform_assert "$cmd" "$call_index" "$expected_args"
-                echo "Counter: $call_index"
                 call_index=$(($call_index + 1))
-                echo "After: $call_index"
               fi
             done <<< "$ASSERT_ARGS"
           fi
