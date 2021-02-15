@@ -91,4 +91,4 @@ By putting it in the action's `.github/workflows/` folder we can ensure that the
 whenever the action has changed. This will also allow us catching bugs and avoid regression issues in the 
 consumers of our action. 
 
-Please refer to the [workflow folder](./github/workflows/) for a more complex usage examples of the _Mockbin Action_.
+Please refer to the [workflow folder](./.github/workflows/) for a more complex usage examples of the _Mockbin Action_.
