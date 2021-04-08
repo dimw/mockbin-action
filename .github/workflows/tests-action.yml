@@ -2,18 +2,18 @@ name: Test action
 on:
   push:
 jobs:
-  test:
+  should-mock-binary-and-assert:
+    name: Should mock binary
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - name: Arrange
-      -
-
-      - name: Act
-        run: |
-          node "$GITHUB_ACTION_PATH/assets/assert.js"
-
+      - name: Arrange - Mock "kustomize" and "kubectl" commands
+        uses: './'
+        with:
+          commands: |
+            kubectl
+            kustomize
 
       - name: Act - call some mocked functions
         run: |
@@ -29,7 +29,7 @@ jobs:
           commands: kustomize
           assert-args: |
             ["edit", "set", "image", "my-image"]
-            ["edit", "add", "configmap", "my-config", "--from-literal=labels=my-[0-9]+"]
+            ["edit", "add", "configmap", "my-config", "--from-literal=\"labels=my-[0-9]+\""]
             ["build"]
 
       - name: Assert - Using a specific call-index
