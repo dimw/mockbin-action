@@ -10,17 +10,16 @@ const callIndex = parseInt(callIndexStr || 0);
 const callResult = callResults[callIndex];
 
 // Get and stringify expected output
-const expectedArgs = getOption('expected-args');
+const expectedArgsStr = getOption('expected-args');
 
 // Get and stringify expected output
 const expectedStdin = getOption('expected-stdin');
 
 // Validate args
-if (expectedArgs) {
-  const expectedArgsStr = JSON.stringify(JSON.parse(expectedArgs));
-  const actualArgs = JSON.stringify(callResult.args);
+if (expectedArgsStr) {
+  const expectedArgs = JSON.parse(expectedArgsStr);
 
-  assert(expectedArgsStr, actualArgs);
+  assert(expectedArgs, callResult.args);
 }
 
 // Validate stdin
@@ -38,8 +37,12 @@ function getOption(name) {
 }
 
 function assert(expected, actual) {
-  if (expected !== actual) {
-    console.error(`Assertion error!\nExpected: ${expected}\nActual: ${actual}`);
-    process.exit(1);
-  }
+  expected.forEach((expectedVal, index) => {
+    const actualVal = actual[index];
+    const expectedRegexp = new RegExp(`^${expectedVal}$`);
+    if (!expectedRegexp.test(actualVal)) {
+      console.error(`ERROR: Assertion at index ${index}, expected ${JSON.stringify(expected)} but got ${JSON.stringify(actual)}!`);
+      process.exit(1);
+    }
+  });
 }
