@@ -38,7 +38,7 @@ function getOption(name) {
 }
 
 function assert(expected, actual) {
-  if (expected !== actual) {
+  if (actual.test(expected)) {
     console.error(`Assertion error!\nExpected: ${expected}\nActual: ${actual}`);
     process.exit(1);
   }
