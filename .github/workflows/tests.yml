@@ -19,6 +19,7 @@ jobs:
         run: |
           kubectl version
           kustomize edit set image my-image
+          kustomize edit add configmap my-config --from-literal="labels=my-123"
           kustomize build | kubectl apply -f -
 
 
@@ -28,6 +29,7 @@ jobs:
           commands: kustomize
           assert-args: |
             ["edit", "set", "image", "my-image"]
+            ["edit", "add", "configmap", "my-config", "--from-literal=\"labels=my-[0-9]+\""]
             ["build"]
 
       - name: Assert - Using a specific call-index
